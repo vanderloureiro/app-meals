@@ -4,12 +4,12 @@ import '../models/category.dart';
 
 class CategoriesMealsPage extends StatelessWidget {
 
-  final Category category;
-
-  const CategoriesMealsPage(this.category, {Key? key}) : super(key: key);
+  const CategoriesMealsPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final category = ModalRoute.of(context)!.settings.arguments as Category;
+
     return Scaffold(
       appBar: AppBar(title: Text(category.title),),
       body: Center(child: Text("Receitas por categoria ${category.id}"),),
