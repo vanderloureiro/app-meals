@@ -12,23 +12,30 @@ class NavigationPage extends StatefulWidget {
 class _NavigationPageState extends State<NavigationPage> {
 
   int _selectPageIndex = 0;
-  String _selectPageTitle = "Vamos Cozinhar?";
 
   final List<Widget> _pages = [
     const CategoriesPage(),
     const FavoritesPage(),
   ];
 
+  final List<String> _titles = [
+    'Lista de Categorias',
+    'Favoritos'
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(_selectPageTitle),
+        title: Text(_titles[_selectPageIndex]),
       ),
       body: _pages[_selectPageIndex],
       bottomNavigationBar: BottomNavigationBar(
         onTap: _selectPage,
-        backgroundColor: Theme.of(context).primaryColor,
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        unselectedItemColor: Colors.white,
+        selectedItemColor: Theme.of(context).colorScheme.secondary,
+        currentIndex: _selectPageIndex,
         items: const [
           BottomNavigationBarItem(
               icon: Icon(Icons.category),
