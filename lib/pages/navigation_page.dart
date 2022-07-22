@@ -1,3 +1,4 @@
+import 'package:app_meals/components/main_drawer.dart';
 import 'package:app_meals/pages/categories_page.dart';
 import 'package:app_meals/pages/favorites_page.dart';
 import 'package:flutter/material.dart';
@@ -30,6 +31,7 @@ class _NavigationPageState extends State<NavigationPage> {
         title: Text(_titles[_selectPageIndex]),
       ),
       body: _pages[_selectPageIndex],
+      drawer: const MainDrawer(),
       bottomNavigationBar: BottomNavigationBar(
         onTap: _selectPage,
         backgroundColor: Theme.of(context).colorScheme.primary,
