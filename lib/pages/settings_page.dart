@@ -1,8 +1,17 @@
 import 'package:app_meals/components/main_drawer.dart';
+import 'package:app_meals/models/settings.dart';
 import 'package:flutter/material.dart';
 
-class SettingsPage extends StatelessWidget {
+class SettingsPage extends StatefulWidget {
   const SettingsPage({Key? key}) : super(key: key);
+
+  @override
+  State<SettingsPage> createState() => _SettingsPageState();
+}
+
+class _SettingsPageState extends State<SettingsPage> {
+
+  var settings = Settings();
 
   @override
   Widget build(BuildContext context) {
@@ -11,9 +20,60 @@ class SettingsPage extends StatelessWidget {
         title: const Text("Configurações"),
       ),
       drawer: const MainDrawer(),
-      body: const Center(
-        child: Text("Minhas configurações"),
+      body: Column(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(20),
+            child: Text(
+              'Configurações',
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
+          ),
+
+          Expanded(child:
+          ListView(
+            children: [
+              _buildSwitch(
+                'Sem gluten',
+                'Só exibe refeições sem gluten!',
+                settings.isGlutenFree,
+                  (value) => setState(() => settings.isGlutenFree = value)
+              ),
+              _buildSwitch(
+                  'Sem Lactose',
+                  'Só exibe refeições sem lactose!',
+                  settings.isLactoseFree,
+                      (value) => setState(() => settings.isLactoseFree = value)
+              ),
+              _buildSwitch(
+                  'Vegana',
+                  'Só exibe refeições veganas!',
+                  settings.isVegan,
+                      (value) => setState(() => settings.isVegan = value)
+              ),
+              _buildSwitch(
+                  'Vegetariana',
+                  'Só exibe refeições vegetarianas!',
+                  settings.isVegetarian,
+                      (value) => setState(() => settings.isVegetarian = value)
+              ),
+            ],
+          ))
+        ],
       ),
+    );
+  }
+
+  Widget _buildSwitch(
+      String title,
+      String subtitle,
+      bool value,
+      Function(bool) onChanged) {
+    return SwitchListTile.adaptive(
+        title: Text(title),
+        subtitle: Text(subtitle),
+        value: value,
+        onChanged: onChanged,
     );
   }
 }
