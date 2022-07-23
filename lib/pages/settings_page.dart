@@ -4,9 +4,10 @@ import 'package:flutter/material.dart';
 
 class SettingsPage extends StatefulWidget {
 
+  final Settings settings;
   final Function(Settings) onSettingsChanged;
 
-  const SettingsPage(this.onSettingsChanged, {Key? key}) : super(key: key);
+  const SettingsPage(this.settings, this.onSettingsChanged, {Key? key}) : super(key: key);
 
   @override
   State<SettingsPage> createState() => _SettingsPageState();
@@ -15,6 +16,12 @@ class SettingsPage extends StatefulWidget {
 class _SettingsPageState extends State<SettingsPage> {
 
   var settings = Settings();
+
+  @override
+  void initState() {
+    super.initState();
+    settings = widget.settings;
+  }
 
   @override
   Widget build(BuildContext context) {
