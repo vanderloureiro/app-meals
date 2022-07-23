@@ -1,5 +1,8 @@
 import 'dart:ui';
 
+import 'package:app_meals/data/dummy_data.dart';
+import 'package:app_meals/models/meal.dart';
+import 'package:app_meals/models/settings.dart';
 import 'package:app_meals/pages/categories_meals_page.dart';
 import 'package:app_meals/pages/categories_page.dart';
 import 'package:app_meals/pages/meal_details_page.dart';
@@ -12,8 +15,28 @@ void main() {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+
+  List<Meal> _availableMeals = DUMMY_MEALS;
+
+  void filterMeals(Settings settings) {
+    setState(() {
+      _availableMeals = DUMMY_MEALS.where((meal) {
+        final s1 = settings.isGlutenFree && !meal.isGlutenFree;
+        final s2 = settings.isLactoseFree && !meal.isLactoseFree;
+        final s3 = settings.isVegan && !meal.isVegan;
+        final s4 = settings.isVegetarian && !meal.isVegetarian;
+        return !s1 && !s2 && !s3 && !s4;
+      }).toList();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,9 +57,9 @@ class MyApp extends StatelessWidget {
       initialRoute: AppRoutes.home,
       routes: {
         AppRoutes.home: (context) => const NavigationPage(),
-        AppRoutes.categories_meals: (context) => const CategoriesMealsPage(),
+        AppRoutes.categories_meals: (context) => CategoriesMealsPage(_availableMeals),
         AppRoutes.meal_details: (context) => const MealDetailsPage(),
-        AppRoutes.settings: (context) => const SettingsPage()
+        AppRoutes.settings: (context) => SettingsPage(filterMeals)
       },
       onUnknownRoute: (settings) => MaterialPageRoute(
           builder: (_) => const CategoriesPage(),

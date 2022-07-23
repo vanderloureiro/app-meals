@@ -3,7 +3,10 @@ import 'package:app_meals/models/settings.dart';
 import 'package:flutter/material.dart';
 
 class SettingsPage extends StatefulWidget {
-  const SettingsPage({Key? key}) : super(key: key);
+
+  final Function(Settings) onSettingsChanged;
+
+  const SettingsPage(this.onSettingsChanged, {Key? key}) : super(key: key);
 
   @override
   State<SettingsPage> createState() => _SettingsPageState();
@@ -68,12 +71,15 @@ class _SettingsPageState extends State<SettingsPage> {
       String title,
       String subtitle,
       bool value,
-      Function(bool) onChanged) {
+      Function(bool) onChangedParam) {
     return SwitchListTile.adaptive(
         title: Text(title),
         subtitle: Text(subtitle),
         value: value,
-        onChanged: onChanged,
+        onChanged: (value) {
+          onChangedParam(value);
+          widget.onSettingsChanged(settings);
+        },
     );
   }
 }
