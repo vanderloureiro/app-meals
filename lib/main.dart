@@ -25,12 +25,13 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
 
   Settings settings = Settings();
-  List<Meal> _availableMeals = DUMMY_MEALS;
+  List<Meal> availableMeals = DUMMY_MEALS;
+  List<Meal> favoriteMeals  = [];
 
-  void filterMeals(Settings settings) {
+  void _filterMeals(Settings settings) {
     setState(() {
       this.settings = settings;
-      _availableMeals = DUMMY_MEALS.where((meal) {
+      availableMeals = DUMMY_MEALS.where((meal) {
         final s1 = settings.isGlutenFree && !meal.isGlutenFree;
         final s2 = settings.isLactoseFree && !meal.isLactoseFree;
         final s3 = settings.isVegan && !meal.isVegan;
@@ -38,6 +39,18 @@ class _MyAppState extends State<MyApp> {
         return !s1 && !s2 && !s3 && !s4;
       }).toList();
     });
+  }
+
+  void _toggleFavorite(Meal meal) {
+    setState(() {
+      favoriteMeals.contains(meal) ?
+          favoriteMeals.remove(meal) :
+          favoriteMeals.add(meal);
+    });
+  }
+
+  bool _isFavorite(Meal meal) {
+    return favoriteMeals.contains(meal);
   }
 
   @override
@@ -58,10 +71,10 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       initialRoute: AppRoutes.home,
       routes: {
-        AppRoutes.home: (context) => const NavigationPage(),
-        AppRoutes.categories_meals: (context) => CategoriesMealsPage(_availableMeals),
-        AppRoutes.meal_details: (context) => const MealDetailsPage(),
-        AppRoutes.settings: (context) => SettingsPage(settings, filterMeals)
+        AppRoutes.home: (context) => NavigationPage(favoriteMeals),
+        AppRoutes.categories_meals: (context) => CategoriesMealsPage(availableMeals),
+        AppRoutes.meal_details: (context) => MealDetailsPage(_toggleFavorite, _isFavorite),
+        AppRoutes.settings: (context) => SettingsPage(settings, _filterMeals)
       },
       onUnknownRoute: (settings) => MaterialPageRoute(
           builder: (_) => const CategoriesPage(),

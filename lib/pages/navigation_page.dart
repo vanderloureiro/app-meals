@@ -1,10 +1,14 @@
 import 'package:app_meals/components/main_drawer.dart';
+import 'package:app_meals/models/meal.dart';
 import 'package:app_meals/pages/categories_page.dart';
 import 'package:app_meals/pages/favorites_page.dart';
 import 'package:flutter/material.dart';
 
 class NavigationPage extends StatefulWidget {
-  const NavigationPage({Key? key}) : super(key: key);
+
+  final List<Meal> favoriteMeals;
+
+  const NavigationPage(this.favoriteMeals, {Key? key}) : super(key: key);
 
   @override
   State<NavigationPage> createState() => _NavigationPageState();
@@ -13,16 +17,21 @@ class NavigationPage extends StatefulWidget {
 class _NavigationPageState extends State<NavigationPage> {
 
   int _selectPageIndex = 0;
-
-  final List<Widget> _pages = [
-    const CategoriesPage(),
-    const FavoritesPage(),
-  ];
+  List<Widget> _pages = [];
 
   final List<String> _titles = [
     'Lista de Categorias',
     'Favoritos'
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    _pages = [
+      const CategoriesPage(),
+      FavoritesPage(widget.favoriteMeals),
+    ];
+  }
 
   @override
   Widget build(BuildContext context) {
